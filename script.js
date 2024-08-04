@@ -1,34 +1,32 @@
-document.getElementById('userForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the form from submitting the traditional way
+// your-script.js
 
-    const ageInput = document.getElementById('age').value;
-    const nameInput = document.getElementById('name').value;
+document.addEventListener('DOMContentLoaded', () => {
+    const ageForm = document.getElementById('ageForm');
+    const ageInput = document.getElementById('age');
+    const nameInput = document.getElementById('name');
 
-    // Validate that inputs are not empty
-    if (ageInput === '' || nameInput === '') {
-        alert('Please fill in both fields.');
-        return;
-    }
+    ageForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent form submission
 
-    const age = Number(ageInput);
-    const name = nameInput;
+        const age = parseInt(ageInput.value, 10);
+        const name = nameInput.value;
 
-    // Create a promise to handle the age validation
-    const ageValidationPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (age > 18) {
-                resolve();
+        if (isNaN(age) || age <= 0) {
+            alert('Please enter a valid age.');
+            return;
+        }
+
+        try {
+            // Simulate asynchronous processing (4 seconds delay)
+            await new Promise((resolve) => setTimeout(resolve, 4000));
+
+            if (age >= 18) {
+                alert(`Welcome, ${name}. You can vote.`);
             } else {
-                reject();
+                alert(`Oh sorry, ${name}. You aren't old enough.`);
             }
-        }, 4000);
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
     });
-
-    ageValidationPromise
-        .then(() => {
-            alert(`Welcome, ${name}. You can vote.`);
-        })
-        .catch(() => {
-            alert(`Oh sorry ${name}. You aren't old enough.`);
-        });
 });
